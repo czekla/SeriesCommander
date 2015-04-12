@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="Series Commander" Language="1033" Version="1.0.0.0"  Manufacturer="Qbi" UpgradeCode="d03e1668-445f-46b4-8157-3768f2e31ae8">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+    <!-- minden komponenthez kell egy feature -->
+    <Feature Id="ProductFeature" Title="Series Commander Setup" Level="1">
+      <ComponentRef Id="ApplicationFiles" />
+      <ComponentRef Id="ApplicationShortcuts"/>
+    </Feature>
+    
+    <!-- belecsomagolja az msi-be a cab-ot -->
+    <Media Id="1" Cabinet="SeriesCommander.cab" EmbedCab="yes" />
+
+    <!-- ikon -->
+    <Icon Id="Icon.ico" SourceFile="../Series Commander/bin/$(var.BUILD)/Series Commander.exe"/>
+    <Property Id="ARPPRODUCTICON" Value="Icon.ico"/>
+    
+    <!-- konyvtarak -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      
+      <!-- telepitesi konyvtar -->
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="Series Commander">
+          <Component Id="ApplicationFiles" Guid="3b5b1a67-a201-476f-b700-346d38f232ab">
+            <!-- TODO: Insert files, registry keys, and other resources here. -->
+            <File Id="SeriesCommander.exe" Source="../Series Commander/bin/$(var.BUILD)/Series Commander.exe" KeyPath="yes">
+              <Shortcut Id="SeriesCommanderLnk" Advertise="yes" Directory="DesktopFolder" Name="Series Commander.lnk"
+                        WorkingDirectory="INSTALLFOLDER" Icon="Icon.ico">
+              </Shortcut>
+            </File>
+            <File Id="SeriesCommander.application" Source="../Series Commander/bin/$(var.BUILD)/Series Commander.application"></File>
+            <File Id="HtmlAgilityPack.dll" Source="../Series Commander/bin/$(var.BUILD)/HtmlAgilityPack.dll"></File>
+            <File Id="Help.chm" Source="../Series Commander/bin/$(var.BUILD)/Help.chm"></File>
+          </Component>
+        </Directory>
+      </Directory>
+
+      <!-- asztal -->
+      <Directory Id="DesktopFolder" Name="Desktop"/>
+
+      <!-- start menu -->
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ProgramMenuSubfolder" Name="Series Commander">
+          <Component Id="ApplicationShortcuts" Guid="66A3F304-5CD8-49CF-8DD5-3A839F8A0B1E">
+            <Shortcut Id="ApplicationShortcut1" Name="Series Commander.lnk" Icon="Icon.ico" Directory="ProgramMenuSubfolder"
+                      Target="[INSTALLFOLDER]Series Commander.exe" WorkingDirectory="INSTALLFOLDER"/>
+            <RegistryValue Root="HKCU" Key="Software\SeriesCommander"
+                      Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+            <RemoveFolder Id="ProgramMenuSubfolder" On="uninstall"/>
+          </Component>
+        </Directory>
+      </Directory>
+      
+    </Directory>
+
+    <!-- installdir stilusu telepito a wix-tol -->
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" ></Property>   
+    <UIRef Id="WixUI_InstallDir"/>
+    
+    <!-- licence 
+     <WixVariable Id="WixUILicenseRtf" Value="path\License.rtf" /> 
+     -->
+
+    <!-- kepek http://wix.tramontana.co.hu/tutorial/user-interface/ui-wizardry -->
+    <!-- szin: 242,185,64 - 217,239,112 -->
+    <!-- 493 by 58 pixels, this bitmap will appear at the top of all but the first page of the installer. -->
+    <WixVariable Id="WixUIBannerBmp" Value="banner.bmp" />
+    <!-- 493 by 312 pixels, this bitmap will appear on the first page of the installer. -->
+    <WixVariable Id="WixUIDialogBmp" Value="dialog.bmp" /> 
+    
+    
+    
+  </Product>
+</Wix>
