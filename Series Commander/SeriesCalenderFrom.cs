@@ -601,7 +601,8 @@ namespace SeriesCommander
             private void torrentButton_Click(object sender, EventArgs e)
             {
                 //Console.WriteLine("Torrent click");
-                string link = @"http://thepiratebay.se/search/" + this.textBox.Text.Replace(" ", "%20") + @"/0/99/0";
+                //string link = @"http://thepiratebay.se/search/" + this.textBox.Text.Replace(" ", "%20") + @"/0/99/0";
+                string link = @"https://kickass.to/usearch/" + this.textBox.Text.Replace(" ", "%20") + "/?field=time_add&sorder=desc";
                 ProcessStartInfo info = new ProcessStartInfo(link);
 
                 if (this.textBox.Text != "") Process.Start(info);
